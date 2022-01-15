@@ -16,6 +16,12 @@ beforeEach(async () => {
 });
 
 describe('UserService', () => {
+  it('should clear the db before the tests', async () => {
+    await userService.superDelete();
+    const users = await userService.findAll({});
+    expect(users).toEqual([]);
+  });
+
   it('should create a user', async () => {
     const user = {
       id: v4(),
@@ -25,76 +31,55 @@ describe('UserService', () => {
     };
 
     const createdUser = await userService.create(user);
-    console.log(`createdUser`, createdUser);
     expect(createdUser).toBeDefined();
     expect(createdUser.name).toBe('Rich');
     expect(createdUser.email).toBe('hello@prisma.io');
     expect(user.acceptTermsAndConditions).toBe(true);
   });
+
+  it('should find all users', async () => {
+    const users = await userService.findAll({}); // this should be line 32, idk why coverage fails
+    expect(users.length).toBe(1);
+  });
+
+  it('should find all users matching the search parameters', async () => {
+    const searchFor = await userService.findAll({
+      where: {
+        email: 'hello@prisma.io',
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
+    expect(searchFor.length).toBe(1);
+  });
+
+  it('should find a user', async () => {
+    const users = await userService.findAll({});
+    const user = await userService.findOne({ email: users[0].email });
+    // gdi ts, if this is null, the test failed lol
+    // @ts-ignore: Object is possibly 'null'.
+    expect(user.name).toEqual('Rich');
+    // @ts-ignore: Object is possibly 'null'.
+    expect(user.email).toEqual('hello@prisma.io');
+  });
+
+  it('should update a user', async () => {
+    const users = await userService.findAll({});
+    const updated = await userService.update({
+      where: {
+        email: 'hello@prisma.io',
+      },
+      data: {
+        name: 'Ash',
+      },
+    });
+    expect(updated.name).not.toBe(users[0].name);
+  });
+
+  it('should delete a user', async () => {
+    await userService.delete({ email: 'hello@prisma.io' });
+    const deleted = await userService.findOne({ email: 'hello@prisma.io' });
+    expect(deleted).toBe(null);
+  });
 });
-
-// test('should create new user ', async () => {
-//   const user = {
-//     id: 1,
-//     name: 'Rich',
-//     email: 'hello@prisma.io',
-//     acceptTermsAndConditions: true,
-//   };
-//   mockCtx.prisma.user.create.mockResolvedValue(user);
-
-//   await expect(createUser(user, ctx)).resolves.toEqual({
-//     id: 1,
-//     name: 'Rich',
-//     email: 'hello@prisma.io',
-//     acceptTermsAndConditions: true,
-//   });
-// });
-
-// test('should update a users name ', async () => {
-//   const user = {
-//     id: 1,
-//     name: 'Rich Name',
-//     email: 'hello@prisma.io',
-//     acceptTermsAndConditions: true,
-//   };
-//   mockCtx.prisma.user.update.mockResolvedValue(user);
-
-//   // update taken out of the context file
-//   // await expect(updateUsername(user, ctx)).resolves.toEqual({
-//   //   id: 1,
-//   //   name: 'Rich Name',
-//   //   email: 'hello@prisma.io',
-//   //   acceptTermsAndConditions: true,
-//   // });
-// });
-
-// test('should fail if user does not accept terms', async () => {
-//   const user = {
-//     id: 1,
-//     name: 'Rich Name',
-//     email: 'hello@prisma.io',
-//     acceptTermsAndConditions: false,
-//   };
-
-//   mockCtx.prisma.user.create.mockRejectedValue(
-//     new Error('User must accept terms!'),
-//   );
-
-//   await expect(createUser(user, ctx)).resolves.toEqual(
-//     new Error('User must accept terms!'),
-//   );
-// });
-
-// test('should delete the user', async () => {
-//   const userToDelete = await mockCtx.prisma.user.findUnique({
-//     where: { id: 1 },
-//   });
-//   if (userToDelete) {
-//     await mockCtx.prisma.user.delete.mockResolvedValue(userToDelete);
-//   }
-// });
-
-// test('should not find any more users now', async () => {
-//   const allUsers = await mockCtx.prisma.user.findMany();
-//   expect(allUsers).toBe(undefined);
-// });

@@ -19,14 +19,18 @@ export class UserService {
     where?: Prisma.UserWhereInput;
     orderBy?: Prisma.UserOrderByWithRelationInput;
   }): Promise<User[]> {
-    const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.user.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-    });
+    if (params) {
+      const { skip, take, cursor, where, orderBy } = params;
+      return this.prisma.user.findMany({
+        skip,
+        take,
+        cursor,
+        where,
+        orderBy,
+      });
+    } else {
+      return this.prisma.user.findMany({});
+    }
   }
 
   async findOne(
@@ -52,5 +56,9 @@ export class UserService {
     return this.prisma.user.delete({
       where,
     });
+  }
+
+  async superDelete() {
+    return this.prisma.$queryRaw`DELETE FROM "User" WHERE 1=1`;
   }
 }
