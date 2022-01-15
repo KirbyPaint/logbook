@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PrimeLogDataCategory {
+  PIRATE_DATA  @map("Pirate Data")
+  CHOZO_LORE   @map("Chozo Lore")
+  CREATURES    @map("Creatures")
+  RESEARCH     @map("Research")
+  ARTIFACTS    @map("Artifacts")
+}
+
+model PrimeLog {
+  id            String               @id @default(cuid())
+  createdAt     DateTime             @default(now())
+  logCategory   PrimeLogDataCategory
+  entry         String
+  firstLocation String
+  entryText     String
+  limitedScan   Boolean?
+  notes         String?
+  image         String?
+  // scannedBy     User?                @relation(fields: [userId], references: [id])
+  userId        String?
+}
+
+model Prime2Log {
+  id            String               @id @default(cuid())
+  createdAt     DateTime             @default(now())
+  logCategory   PrimeLogDataCategory
+  entry         String
+  firstLocation String
+  entryText     String
+  limitedScan   Boolean?
+  notes         String?
+  image         String?
+  planet        String?
+  biome         String?
+  // scannedBy     User?                @relation(fields: [userId], references: [id])
+  userId        String?
+}
+
+model Prime3Log {
+  id            String               @id @default(cuid())
+  createdAt     DateTime             @default(now())
+  logCategory   PrimeLogDataCategory
+  entry         String
+  firstLocation String
+  entryText     String
+  limitedScan   Boolean?
+  notes         String?
+  image         String?
+  // scannedBy     User?                @relation(fields: [userId], references: [id])
+  userId        String?
+}
+
+model User {
+  id                       String  @id @db.Uuid
+  email                    String  @unique
+  name                     String?
+  acceptTermsAndConditions Boolean
+}
+
+// model User {
+//   id        String      @id @default(cuid())
+//   username  String      @unique
+//   password  String
+//   PrimeLog  PrimeLog[]
+//   Prime2Log Prime2Log[]
+//   Prime3Log Prime3Log[]
+// }
