@@ -22,21 +22,21 @@ model PrimeLog {
   id            String               @id @default(cuid())
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
-  entry         String
+  entry         String               @unique
   firstLocation String
   entryText     String
   limitedScan   Boolean?
   notes         String?
   image         String?
-  // scannedBy     User?                @relation(fields: [userId], references: [id])
-  userId        String?
+  scannedById   String?              @db.Uuid
+  scannedBy     User?                @relation(fields: [scannedById], references: [id])
 }
 
 model Prime2Log {
   id            String               @id @default(cuid())
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
-  entry         String
+  entry         String               @unique
   firstLocation String
   entryText     String
   limitedScan   Boolean?
@@ -44,36 +44,31 @@ model Prime2Log {
   image         String?
   planet        String?
   biome         String?
-  // scannedBy     User?                @relation(fields: [userId], references: [id])
-  userId        String?
+  scannedById   String?              @db.Uuid
+  scannedBy     User?                @relation(fields: [scannedById], references: [id])
 }
 
 model Prime3Log {
   id            String               @id @default(cuid())
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
-  entry         String
+  entry         String               @unique
   firstLocation String
   entryText     String
   limitedScan   Boolean?
   notes         String?
   image         String?
-  // scannedBy     User?                @relation(fields: [userId], references: [id])
-  userId        String?
+  scannedById   String?              @db.Uuid
+  scannedBy     User?                @relation(fields: [scannedById], references: [id])
 }
 
 model User {
-  id                       String  @id @db.Uuid
-  email                    String  @unique
-  name                     String?
-  acceptTermsAndConditions Boolean
+  id        String      @id @db.Uuid
+  email     String      @unique
+  name      String?
+  username  String      @unique
+  password  String
+  PrimeLog  PrimeLog[]
+  Prime2Log Prime2Log[]
+  Prime3Log Prime3Log[]
 }
-
-// model User {
-//   id        String      @id @default(cuid())
-//   username  String      @unique
-//   password  String
-//   PrimeLog  PrimeLog[]
-//   Prime2Log Prime2Log[]
-//   Prime3Log Prime3Log[]
-// }
