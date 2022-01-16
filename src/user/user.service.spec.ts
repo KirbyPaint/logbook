@@ -27,6 +27,8 @@ describe('UserService', () => {
       id: v4(),
       name: 'Rich',
       email: 'hello@prisma.io',
+      username: 'Dummy1',
+      password: 'Insecure',
       acceptTermsAndConditions: true,
     };
 
