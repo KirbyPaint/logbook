@@ -6,7 +6,6 @@ import * as parse from 'csv-parse/lib/sync';
 
 const prisma = new PrismaClient();
 
-// Ultimately find a way that each seed file is only responsible for its own logs
 async function main() {
   await prisma.$connect();
   await prime1ArtifactData(
@@ -66,6 +65,7 @@ async function prime1ArtifactData(
       entry: entry[0] ?? 'Failed to parse CSV',
       entryText: entry[1] ?? 'Failed to parse CSV',
     };
+    console.log(`logItem:`, logItem);
     await prisma.primeLog.create({ data: logItem });
   }
 }
@@ -82,6 +82,7 @@ async function prime1ChozoData(
       firstLocation: entry[1] ?? 'Failed to parse CSV',
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
+    console.log(`logItem:`, logItem);
     await prisma.primeLog.create({ data: logItem });
   }
 }
@@ -100,6 +101,7 @@ async function prime1CreatureData(
       limitedScan: entry[3] === 'Yes' ? true : false,
       notes: entry[4] ?? 'Failed to parse CSV',
     };
+    console.log(`logItem:`, logItem);
     await prisma.primeLog.create({ data: logItem });
   }
 }
@@ -116,6 +118,7 @@ async function prime1PirateData(
       firstLocation: entry[1] ?? 'Failed to parse CSV',
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
+    console.log(`logItem:`, logItem);
     await prisma.primeLog.create({ data: logItem });
   }
 }
@@ -132,6 +135,7 @@ async function prime1ResearchData(
       firstLocation: entry[1] ?? 'Failed to parse CSV',
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
+    console.log(`logItem:`, logItem);
     await prisma.primeLog.create({ data: logItem });
   }
 }

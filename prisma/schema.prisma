@@ -22,7 +22,7 @@ model PrimeLog {
   id            String               @id @default(cuid())
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
-  entry         String               @unique
+  entry         String
   firstLocation String?
   entryText     String
   limitedScan   Boolean?
@@ -36,7 +36,7 @@ model Prime2Log {
   id            String               @id @default(cuid())
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
-  entry         String               @unique
+  entry         String
   firstLocation String
   entryText     String
   limitedScan   Boolean?
@@ -52,7 +52,7 @@ model Prime3Log {
   id            String               @id @default(cuid())
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
-  entry         String               @unique
+  entry         String
   firstLocation String
   entryText     String
   limitedScan   Boolean?
