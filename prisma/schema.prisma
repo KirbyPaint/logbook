@@ -23,7 +23,7 @@ model PrimeLog {
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
   entry         String               @unique
-  firstLocation String
+  firstLocation String?
   entryText     String
   limitedScan   Boolean?
   notes         String?
