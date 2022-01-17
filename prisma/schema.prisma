@@ -18,8 +18,8 @@ enum PrimeLogDataCategory {
   ARTIFACTS    @map("Artifacts")
 }
 
-model PrimeLog {
-  id            String               @id @default(cuid())
+model Prime1Log {
+  id            String               @id @default(uuid())
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
   entry         String
@@ -28,12 +28,12 @@ model PrimeLog {
   limitedScan   Boolean?
   notes         String?
   image         String?
-  scannedById   String?              @db.Uuid
-  scannedBy     User?                @relation(fields: [scannedById], references: [id])
+  User          User?                @relation(fields: [userId], references: [id])
+  userId        String?
 }
 
 model Prime2Log {
-  id            String               @id @default(cuid())
+  id            String               @id @default(uuid())
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
   entry         String
@@ -44,12 +44,12 @@ model Prime2Log {
   image         String?
   planet        String?
   biome         String?
-  scannedById   String?              @db.Uuid
-  scannedBy     User?                @relation(fields: [scannedById], references: [id])
+  User          User?                @relation(fields: [userId], references: [id])
+  userId        String?
 }
 
 model Prime3Log {
-  id            String               @id @default(cuid())
+  id            String               @id @default(uuid())
   createdAt     DateTime             @default(now())
   logCategory   PrimeLogDataCategory
   entry         String
@@ -58,17 +58,17 @@ model Prime3Log {
   limitedScan   Boolean?
   notes         String?
   image         String?
-  scannedById   String?              @db.Uuid
-  scannedBy     User?                @relation(fields: [scannedById], references: [id])
+  User          User?                @relation(fields: [userId], references: [id])
+  userId        String?
 }
 
 model User {
-  id        String      @id @db.Uuid
+  id        String      @id @default(uuid())
   email     String      @unique
   name      String?
   username  String      @unique
   password  String
-  PrimeLog  PrimeLog[]
+  PrimeLog  Prime1Log[]
   Prime2Log Prime2Log[]
   Prime3Log Prime3Log[]
 }

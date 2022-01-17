@@ -19,6 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:up": "pg_ctl -D /usr/local/var/postgres -l logfile start",
     "db:push": "npx prisma db push",
     "db:migrate": "prisma migrate dev --name",
     "db:seed": "npx prisma db seed"
@@ -30,6 +31,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@prisma/client": "^3.8.1",
     "chalk": "4.1.2",
+    "class-validator": "^0.13.2",
     "csv-parse": "4.16.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

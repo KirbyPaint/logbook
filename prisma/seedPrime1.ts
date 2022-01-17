@@ -66,7 +66,7 @@ async function prime1ArtifactData(
       entryText: entry[1] ?? 'Failed to parse CSV',
     };
     console.log(`logItem:`, logItem);
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 
@@ -83,7 +83,7 @@ async function prime1ChozoData(
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
     console.log(`logItem:`, logItem);
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 
@@ -102,7 +102,7 @@ async function prime1CreatureData(
       notes: entry[4] ?? 'Failed to parse CSV',
     };
     console.log(`logItem:`, logItem);
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 
@@ -119,7 +119,7 @@ async function prime1PirateData(
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
     console.log(`logItem:`, logItem);
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 
@@ -136,7 +136,7 @@ async function prime1ResearchData(
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
     console.log(`logItem:`, logItem);
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 

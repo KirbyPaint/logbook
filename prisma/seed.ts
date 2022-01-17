@@ -66,7 +66,7 @@ async function prime1ArtifactData(
       entry: entry[0] ?? 'Failed to parse CSV',
       entryText: entry[1] ?? 'Failed to parse CSV',
     };
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 
@@ -82,7 +82,7 @@ async function prime1ChozoData(
       firstLocation: entry[1] ?? 'Failed to parse CSV',
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 
@@ -100,7 +100,7 @@ async function prime1CreatureData(
       limitedScan: entry[3] === 'Yes' ? true : false,
       notes: entry[4] ?? 'Failed to parse CSV',
     };
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 
@@ -116,7 +116,7 @@ async function prime1PirateData(
       firstLocation: entry[1] ?? 'Failed to parse CSV',
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 
@@ -132,7 +132,7 @@ async function prime1ResearchData(
       firstLocation: entry[1] ?? 'Failed to parse CSV',
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
-    await prisma.primeLog.create({ data: logItem });
+    await prisma.prime1Log.create({ data: logItem });
   }
 }
 
