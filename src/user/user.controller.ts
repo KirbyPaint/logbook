@@ -35,8 +35,21 @@ export class UserController {
     return this.userService.update(id, updateUserDto);
   }
 
+  @Patch(':userId/prime/:primeId')
+  updateRelation(
+    @Param('userId') userId: string,
+    @Param('primeId') primeId: string,
+  ) {
+    return this.userService.addLogToUser(userId, primeId);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: Prisma.UserWhereUniqueInput) {
     return this.userService.delete(id);
+  }
+
+  @Delete('nuke/forReal')
+  superDelete() {
+    return this.userService.superDelete();
   }
 }

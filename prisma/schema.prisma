@@ -28,7 +28,7 @@ model Prime1Log {
   limitedScan   Boolean?
   notes         String?
   image         String?
-  User          User?                @relation(fields: [userId], references: [id])
+  User          User[]               @relation(fields: [userId], references: [id])
   userId        String?
 }
 
@@ -44,7 +44,7 @@ model Prime2Log {
   image         String?
   planet        String?
   biome         String?
-  User          User?                @relation(fields: [userId], references: [id])
+  User          User[]               @relation(fields: [userId], references: [id])
   userId        String?
 }
 
@@ -58,17 +58,29 @@ model Prime3Log {
   limitedScan   Boolean?
   notes         String?
   image         String?
-  User          User?                @relation(fields: [userId], references: [id])
+  User          User[]               @relation(fields: [userId], references: [id])
   userId        String?
 }
 
 model User {
-  id        String      @id @default(uuid())
-  email     String      @unique
-  name      String?
-  username  String      @unique
-  password  String
-  PrimeLog  Prime1Log[]
-  Prime2Log Prime2Log[]
-  Prime3Log Prime3Log[]
+  id           String      @id @default(uuid())
+  email        String      @unique
+  name         String?
+  username     String      @unique
+  password     String
+  Prime1Log    Prime1Log[] @relation(fields: [Prime1LogIds], references: [id])
+  Prime1LogIds String?
+  Prime2Log    Prime2Log[] @relation(fields: [Prime2LogIds], references: [id])
+  Prime2LogIds String?
+  Prime3Log    Prime3Log[] @relation(fields: [Prime3LogIds], references: [id])
+  Prime3LogIds String?
 }
+
+// model LogsOnUsers {
+//   id          String   @id @default(uuid())
+//   userId      String   @unique
+//   Prime1LogId String
+//   Prime2LogId String
+//   Prime3LogId String
+//   scannedOn   DateTime @default(now())
+// }
