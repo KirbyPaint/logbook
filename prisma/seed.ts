@@ -29,6 +29,18 @@ async function main() {
     'Prime1_ResearchData.csv',
     PrimeLogDataCategory.RESEARCH,
   );
+  // 2;
+  await prime2CreatureData(
+    'Prime2_CreatureData.csv',
+    PrimeLogDataCategory.CREATURES,
+  );
+  await prime2LoreData('Prime2_LoreData.csv', PrimeLogDataCategory.LORE);
+  await prime2ResearchData(
+    'Prime2_ResearchData.csv',
+    PrimeLogDataCategory.RESEARCH,
+  );
+  // Users
+  await seedUsers('exampleUsers.csv');
 }
 
 async function stream(filename: string): Promise<string[][]> {
@@ -133,6 +145,84 @@ async function prime1ResearchData(
       entryText: entry[2] ?? 'Failed to parse CSV',
     };
     await prisma.prime1Log.create({ data: logItem });
+  }
+}
+
+// Prime 2
+
+async function prime2CreatureData(
+  filename: string,
+  logCategory: PrimeLogDataCategory,
+) {
+  const entries = await stream(filename);
+  for (const entry of entries) {
+    const logItem = {
+      logCategory,
+      entry: entry[0] ?? 'Failed to parse CSV',
+      firstLocation: entry[1] ?? 'Failed to parse CSV',
+      entryText: entry[2] ?? 'Failed to parse CSV',
+      limitedScan: entry[3] === 'Yes' ? true : false,
+      notes: entry[4] ?? 'Failed to parse CSV',
+      image: entry[5] ?? 'Failed to parse CSV',
+      majorCategory: entry[6] ?? 'Failed to parse CSV',
+      minorCategory: entry[7] ?? 'Failed to parse CSV',
+      subCategory: entry[8] ?? 'Failed to parse CSV',
+    };
+    await prisma.prime2Log.create({ data: logItem });
+  }
+}
+
+async function prime2LoreData(
+  filename: string,
+  logCategory: PrimeLogDataCategory,
+) {
+  const entries = await stream(filename);
+  for (const entry of entries) {
+    const logItem = {
+      logCategory,
+      entry: entry[0] ?? 'Failed to parse CSV',
+      firstLocation: entry[1] ?? 'Failed to parse CSV',
+      entryText: entry[2] ?? 'Failed to parse CSV',
+      image: entry[3] ?? 'Failed to parse CSV',
+      majorCategory: entry[4] ?? 'Failed to parse CSV',
+      minorCategory: entry[5] ?? 'Failed to parse CSV',
+      subCategory: entry[6] ?? 'Failed to parse CSV',
+    };
+    await prisma.prime2Log.create({ data: logItem });
+  }
+}
+
+async function prime2ResearchData(
+  filename: string,
+  logCategory: PrimeLogDataCategory,
+) {
+  const entries = await stream(filename);
+  for (const entry of entries) {
+    const logItem = {
+      logCategory,
+      entry: entry[0] ?? 'Failed to parse CSV',
+      firstLocation: entry[1] ?? 'Failed to parse CSV',
+      entryText: entry[2] ?? 'Failed to parse CSV',
+      limitedScan: entry[3] === 'Yes' ? true : false,
+      notes: entry[4] ?? 'Failed to parse CSV',
+      image: entry[5] ?? 'Failed to parse CSV',
+      majorCategory: entry[6] ?? 'Failed to parse CSV',
+      minorCategory: entry[7] ?? 'Failed to parse CSV',
+    };
+    await prisma.prime2Log.create({ data: logItem });
+  }
+}
+
+async function seedUsers(filename: string) {
+  const entries = await stream(filename);
+  for (const entry of entries) {
+    const logItem = {
+      email: entry[0],
+      name: entry[1],
+      username: entry[2],
+      password: entry[3],
+    };
+    await prisma.user.create({ data: logItem });
   }
 }
 
