@@ -3,7 +3,6 @@ import { Prisma, User } from '@prisma/client';
 import * as chalk from 'chalk';
 import { LogService } from '../log/log.service';
 import { PrismaService } from '../prisma.service';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -59,10 +58,6 @@ export class UserService {
   }
 
   async update(id: string, params: Prisma.UserUpdateInput): Promise<User> {
-    // why is ID coming back as an object?
-    console.log('params', params);
-    console.log('id', id);
-    const why = id.toString();
     const userToUpdate = await this.prisma.user.findUnique({
       where: {
         id,
@@ -71,7 +66,13 @@ export class UserService {
     if (!userToUpdate) {
       throw new Error('User not found');
     }
-    return userToUpdate;
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: params,
+    });
+    return updatedUser;
   }
 
   async addLogToUser(userId: string, logId: string) {

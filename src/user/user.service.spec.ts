@@ -80,7 +80,7 @@ describe('UserService', () => {
       const deleted = await (
         await userService.findAll({})
       ).filter((user) => user.email === 'hello@prisma.io');
-      expect(deleted).toBe(null);
+      expect(deleted).toStrictEqual([]);
     } catch (e) {
       console.error(e);
     }
