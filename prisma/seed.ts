@@ -9,41 +9,41 @@ const prisma = new PrismaClient();
 // Ultimately find a way that each seed file is only responsible for its own logs
 async function main() {
   await prisma.$connect();
-  await prime1ArtifactData(
-    'Prime1_ArtifactData.csv',
-    PrimeLogDataCategory.ARTIFACTS,
-  );
-  await prime1ChozoData(
-    'Prime1_ChozoData.csv',
-    PrimeLogDataCategory.CHOZO_LORE,
-  );
-  await prime1CreatureData(
-    'Prime1_CreatureData.csv',
-    PrimeLogDataCategory.CREATURES,
-  );
-  await prime1PirateData(
-    'Prime1_PirateData.csv',
-    PrimeLogDataCategory.PIRATE_DATA,
-  );
-  await prime1ResearchData(
-    'Prime1_ResearchData.csv',
-    PrimeLogDataCategory.RESEARCH,
-  );
-  // 2;
-  await prime2CreatureData(
-    'Prime2_CreatureData.csv',
-    PrimeLogDataCategory.CREATURES,
-  );
-  await prime2LoreData('Prime2_LoreData.csv', PrimeLogDataCategory.LORE);
-  await prime2ResearchData(
-    'Prime2_ResearchData.csv',
-    PrimeLogDataCategory.RESEARCH,
-  );
-  await prime3LoreData('Prime3_LoreData.csv', PrimeLogDataCategory.LORE);
-  await prime3ResearchData(
-    'Prime3_ResearchData.csv',
-    PrimeLogDataCategory.RESEARCH,
-  );
+  // await prime1ArtifactData(
+  //   'Prime1_ArtifactData.csv',
+  //   PrimeLogDataCategory.ARTIFACTS,
+  // );
+  // await prime1ChozoData(
+  //   'Prime1_ChozoData.csv',
+  //   PrimeLogDataCategory.CHOZO_LORE,
+  // );
+  // await prime1CreatureData(
+  //   'Prime1_CreatureData.csv',
+  //   PrimeLogDataCategory.CREATURES,
+  // );
+  // await prime1PirateData(
+  //   'Prime1_PirateData.csv',
+  //   PrimeLogDataCategory.PIRATE_DATA,
+  // );
+  // await prime1ResearchData(
+  //   'Prime1_ResearchData.csv',
+  //   PrimeLogDataCategory.RESEARCH,
+  // );
+  // // 2;
+  // await prime2CreatureData(
+  //   'Prime2_CreatureData.csv',
+  //   PrimeLogDataCategory.CREATURES,
+  // );
+  // await prime2LoreData('Prime2_LoreData.csv', PrimeLogDataCategory.LORE);
+  // await prime2ResearchData(
+  //   'Prime2_ResearchData.csv',
+  //   PrimeLogDataCategory.RESEARCH,
+  // );
+  // await prime3LoreData('Prime3_LoreData.csv', PrimeLogDataCategory.LORE);
+  // await prime3ResearchData(
+  //   'Prime3_ResearchData.csv',
+  //   PrimeLogDataCategory.RESEARCH,
+  // );
   // Users
   await seedUsers('exampleUsers.csv');
 }
