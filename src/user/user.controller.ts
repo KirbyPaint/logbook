@@ -31,8 +31,8 @@ export class UserController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  update(@Param('id') userId: string, @Body() params: Prisma.UserUpdateInput) {
+    return this.userService.update(userId, params);
   }
 
   @Patch(':userId/prime/:primeId')

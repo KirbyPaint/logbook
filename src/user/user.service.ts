@@ -58,18 +58,19 @@ export class UserService {
     });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
+  async update(id: string, params: Prisma.UserUpdateInput): Promise<User> {
+    // why is ID coming back as an object?
+    console.log('params', params);
+    console.log('id', id);
+    const why = id.toString();
     const userToUpdate = await this.prisma.user.findUnique({
-      where: { id },
+      where: {
+        id,
+      },
     });
-    const logToAdd = await this.logService.findOne(
-      updateUserDto?.Prime1Log.toString(),
-    );
-
-    if (userToUpdate && logToAdd) {
-      return this.addLogToUser(id, logToAdd.id);
+    if (!userToUpdate) {
+      throw new Error('User not found');
     }
-
     return userToUpdate;
   }
 

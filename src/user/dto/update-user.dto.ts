@@ -1,28 +1,24 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { Prime1Log, Prime2Log, Prime3Log } from '@prisma/client';
-import { IsEmail, IsOptional, IsString, IsUUID } from 'class-validator';
-import { CreateUserDto } from './create-user.dto';
+import { Prisma } from '@prisma/client';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @IsOptional()
-  @IsEmail()
-  email?: string;
-  @IsOptional()
-  @IsString()
-  name?: string;
-  @IsOptional()
-  @IsString()
-  username?: string;
-  @IsOptional()
-  @IsString()
-  password?: string;
-  @IsOptional()
-  @IsUUID()
-  Prime1Log: Prime1Log;
-  @IsOptional()
-  @IsUUID()
-  Prime2Log: Prime2Log;
-  @IsOptional()
-  @IsUUID()
-  Prime3Log: Prime3Log;
+export class UpdateUserDto {
+  id?: Prisma.StringFieldUpdateOperationsInput | string;
+  email?: Prisma.StringFieldUpdateOperationsInput | string;
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  username?: Prisma.StringFieldUpdateOperationsInput | string;
+  password?: Prisma.StringFieldUpdateOperationsInput | string;
+  Prime1LogIds?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
+  Prime2LogIds?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
+  Prime3LogIds?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
+  Prime1Log?: Prisma.Prime1LogUpdateManyWithoutUserInput;
+  Prime2Log?: Prisma.Prime2LogUpdateManyWithoutUserInput;
+  Prime3Log?: Prisma.Prime3LogUpdateManyWithoutUserInput;
 }
