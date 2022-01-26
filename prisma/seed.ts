@@ -39,6 +39,11 @@ async function main() {
     'Prime2_ResearchData.csv',
     PrimeLogDataCategory.RESEARCH,
   );
+  await prime3LoreData('Prime3_LoreData.csv', PrimeLogDataCategory.LORE);
+  await prime3ResearchData(
+    'Prime3_ResearchData.csv',
+    PrimeLogDataCategory.RESEARCH,
+  );
   // Users
   await seedUsers('exampleUsers.csv');
 }
@@ -193,6 +198,70 @@ async function prime2LoreData(
 }
 
 async function prime2ResearchData(
+  filename: string,
+  logCategory: PrimeLogDataCategory,
+) {
+  const entries = await stream(filename);
+  for (const entry of entries) {
+    const logItem = {
+      logCategory,
+      entry: entry[0] ?? 'Failed to parse CSV',
+      firstLocation: entry[1] ?? 'Failed to parse CSV',
+      entryText: entry[2] ?? 'Failed to parse CSV',
+      limitedScan: entry[3] === 'Yes' ? true : false,
+      notes: entry[4] ?? 'Failed to parse CSV',
+      image: entry[5] ?? 'Failed to parse CSV',
+      majorCategory: entry[6] ?? 'Failed to parse CSV',
+      minorCategory: entry[7] ?? 'Failed to parse CSV',
+    };
+    await prisma.prime2Log.create({ data: logItem });
+  }
+}
+
+// Come back to this one since my fucking hours of data entry didn't save
+// bullshit
+async function prime3CreatureData(
+  filename: string,
+  logCategory: PrimeLogDataCategory,
+) {
+  const entries = await stream(filename);
+  for (const entry of entries) {
+    const logItem = {
+      logCategory,
+      entry: entry[0] ?? 'Failed to parse CSV',
+      firstLocation: entry[1] ?? 'Failed to parse CSV',
+      entryText: entry[2] ?? 'Failed to parse CSV',
+      limitedScan: entry[3] === 'Yes' ? true : false,
+      notes: entry[4] ?? 'Failed to parse CSV',
+      image: entry[5] ?? 'Failed to parse CSV',
+      majorCategory: entry[6] ?? 'Failed to parse CSV',
+      minorCategory: entry[7] ?? 'Failed to parse CSV',
+    };
+    await prisma.prime2Log.create({ data: logItem });
+  }
+}
+
+async function prime3LoreData(
+  filename: string,
+  logCategory: PrimeLogDataCategory,
+) {
+  const entries = await stream(filename);
+  for (const entry of entries) {
+    const logItem = {
+      logCategory,
+      entry: entry[0] ?? 'Failed to parse CSV',
+      firstLocation: entry[1] ?? 'Failed to parse CSV',
+      entryText: entry[2] ?? 'Failed to parse CSV',
+      limitedScan: entry[3] === 'Yes' ? true : false,
+      notes: entry[4] ?? 'Failed to parse CSV',
+      image: entry[5] ?? 'Failed to parse CSV',
+      majorCategory: entry[6] ?? 'Failed to parse CSV',
+    };
+    await prisma.prime2Log.create({ data: logItem });
+  }
+}
+
+async function prime3ResearchData(
   filename: string,
   logCategory: PrimeLogDataCategory,
 ) {
