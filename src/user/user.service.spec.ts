@@ -2,14 +2,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma.service';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { uuid as v4 } from 'uuidv4';
+import { v4 } from 'uuid';
+import { LogService } from '../log/log.service';
 
 let userService: UserService;
 
 beforeEach(async () => {
   const app: TestingModule = await Test.createTestingModule({
     controllers: [UserController],
-    providers: [UserService, PrismaService],
+    providers: [UserService, PrismaService, LogService],
   }).compile();
 
   userService = app.get<UserService>(UserService);
@@ -29,14 +30,12 @@ describe('UserService', () => {
       email: 'hello@prisma.io',
       username: 'Dummy1',
       password: 'Insecure',
-      acceptTermsAndConditions: true,
     };
 
     const createdUser = await userService.create(user);
     expect(createdUser).toBeDefined();
     expect(createdUser.name).toBe('Rich');
     expect(createdUser.email).toBe('hello@prisma.io');
-    expect(user.acceptTermsAndConditions).toBe(true);
   });
 
   it('should find all users', async () => {
@@ -58,7 +57,7 @@ describe('UserService', () => {
 
   it('should find a user', async () => {
     const users = await userService.findAll({});
-    const user = await userService.findOne({ email: users[0].email });
+    const user = await userService.findOne(users[0].id);
     // gdi ts, if this is null, the test failed lol
     // @ts-ignore: Object is possibly 'null'.
     expect(user.name).toEqual('Rich');
@@ -68,20 +67,22 @@ describe('UserService', () => {
 
   it('should update a user', async () => {
     const users = await userService.findAll({});
-    // const updated = await userService.update({
-    //   where: {
-    //     email: 'hello@prisma.io',
-    //   },
-    //   data: {
-    //     name: 'Ash',
-    //   },
-    // });
-    // expect(updated.name).not.toBe(users[0].name);
+    const user = await userService.update(users[0].id, {
+      name: 'Samus',
+    });
+    // @ts-ignore: Object is possibly 'null'.
+    expect(user.name).toEqual('Samus');
   });
 
   it('should delete a user', async () => {
     await userService.delete({ email: 'hello@prisma.io' });
-    const deleted = await userService.findOne({ email: 'hello@prisma.io' });
-    expect(deleted).toBe(null);
+    try {
+      const deleted = await (
+        await userService.findAll({})
+      ).filter((user) => user.email === 'hello@prisma.io');
+      expect(deleted).toBe(null);
+    } catch (e) {
+      console.error(e);
+    }
   });
 });
