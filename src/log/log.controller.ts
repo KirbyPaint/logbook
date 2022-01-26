@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
+import { LogMetadataType } from './dto/metadata-return.type';
 import { UpdateLog1Dto } from './dto/update-log1.dto';
 import { LogService } from './log.service';
 
@@ -17,20 +19,25 @@ export class LogController {
   // No Create method, logs will never be created
   // UNTIL METROID PRIME 4 IS OUT AYOOO
 
+  // @Get()
+  // findAll(@Param('param') param) {
+  //   return this.logService.findAll(param);
+  // }
+
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.logService.findOne(id);
+  // }
+
   @Get()
-  findAll(@Param('param') param) {
-    return this.logService.findAll(param);
+  superFind(@Query('skip') skip: string, @Query('take') take: string) {
+    return this.logService.superFind({ skip, take });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.logService.findOne(id);
-  }
-
-  @Get('scanned/prime')
-  findScanned() {
-    return this.logService.findScanned();
-  }
+  // @Get('scanned/prime')
+  // findScanned() {
+  //   return this.logService.findScanned();
+  // }
 
   // The only Update action that should be taken is
   // updating the User who has scanned the log
