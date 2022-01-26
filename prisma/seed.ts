@@ -237,7 +237,7 @@ async function prime3CreatureData(
       majorCategory: entry[6] ?? 'Failed to parse CSV',
       minorCategory: entry[7] ?? 'Failed to parse CSV',
     };
-    await prisma.prime2Log.create({ data: logItem });
+    await prisma.prime3Log.create({ data: logItem });
   }
 }
 
@@ -257,7 +257,7 @@ async function prime3LoreData(
       image: entry[5] ?? 'Failed to parse CSV',
       majorCategory: entry[6] ?? 'Failed to parse CSV',
     };
-    await prisma.prime2Log.create({ data: logItem });
+    await prisma.prime3Log.create({ data: logItem });
   }
 }
 
@@ -274,11 +274,8 @@ async function prime3ResearchData(
       entryText: entry[2] ?? 'Failed to parse CSV',
       limitedScan: entry[3] === 'Yes' ? true : false,
       notes: entry[4] ?? 'Failed to parse CSV',
-      image: entry[5] ?? 'Failed to parse CSV',
-      majorCategory: entry[6] ?? 'Failed to parse CSV',
-      minorCategory: entry[7] ?? 'Failed to parse CSV',
     };
-    await prisma.prime2Log.create({ data: logItem });
+    await prisma.prime3Log.create({ data: logItem });
   }
 }
 
