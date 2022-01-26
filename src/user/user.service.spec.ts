@@ -57,7 +57,7 @@ describe('UserService', () => {
 
   it('should find a user', async () => {
     const users = await userService.findAll({});
-    const user = await userService.findOne(users[0].id);
+    const user = await userService.findOne({ where: { id: users[0].id } });
     // gdi ts, if this is null, the test failed lol
     // @ts-ignore: Object is possibly 'null'.
     expect(user.name).toEqual('Rich');
