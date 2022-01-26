@@ -46,9 +46,10 @@ export class UserService {
     }
   }
 
-  async findOne(id: string): Promise<User | null> {
+  async findOne(params: Prisma.UserFindUniqueArgs): Promise<User | null> {
+    const { where } = params;
     return await this.prisma.user.findUnique({
-      where: { id },
+      where,
       include: {
         Prime1Log: true,
         Prime2Log: true,
