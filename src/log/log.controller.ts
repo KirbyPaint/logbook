@@ -30,8 +30,8 @@ export class LogController {
   // }
 
   @Get()
-  superFind(@Query('skip') skip: string, @Query('take') take: string) {
-    return this.logService.superFind({ skip, take });
+  superFind(@Query() query: any) {
+    return this.logService.superFind(query);
   }
 
   // @Get('scanned/prime')

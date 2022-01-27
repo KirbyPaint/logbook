@@ -3,6 +3,7 @@ import { Prime1Log, Prime2Log, Prime3Log, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import { LogMetadataType } from './dto/metadata-return.type';
 import { UpdateLog1Dto } from './dto/update-log1.dto';
+import * as hash from 'object-hash';
 
 @Injectable()
 export class LogService {
@@ -14,6 +15,8 @@ export class LogService {
     cursor?: Prisma.UserWhereUniqueInput;
     where?: Prisma.UserWhereInput;
     orderBy?: Prisma.UserOrderByWithRelationInput;
+    first?: string;
+    last?: string;
   }): Promise<Prime1Log[] | Prime2Log[] | Prime3Log[]> {
     console.log('params', params);
     if (params) {
@@ -50,15 +53,16 @@ export class LogService {
     orderBy?: Prisma.UserOrderByWithRelationInput;
   }): Promise<LogMetadataType> {
     console.log('params', params);
-    const { skip, take, cursor, where, orderBy } = Object(params);
-    // check if converting skip to number returns NaN
-    // if it does, then set it to ZERO
-    const intSkip = Number(skip) || 0;
-    const intTake = Number(take) || 0;
-    console.log('typeof intSkip', typeof intSkip);
+
+    // Why don't we set first/last to be the cursor override?
+    // That's how it functionally works...
+    const { skip, take, cursor, where, orderBy, first, last } = Object(params);
+
+    const cursorIndex = first;
+
     const logs = await this.prisma.prime1Log.findMany({
-      skip: intSkip,
-      take: intTake,
+      skip: Number(skip) || undefined,
+      take: Number(take) || undefined,
       cursor,
       where,
       orderBy: {
@@ -68,51 +72,45 @@ export class LogService {
         User: true,
       },
     });
-    console.log('logs[0]', logs[0]);
+
     const total = logs.length;
     const firstIdx = logs[0].id;
     const lastIdx = logs[logs.length - 1].id;
-    const filterParams = {};
-    // this will be the stuff I gotta figure out
 
-    // in order to get the idBefore, we need to know the whole table
-    // PLUS the item before the selection
-    // so... create the full table
-    // then find the id of the first item we need to select
-    // then take one more from front and back if possible
+    const firstLog = logs[0];
+    const lastLog = logs[logs.length - 1];
 
-    // Can we do a lookup on one item (the first) and like, take -1 to get the before? get a table of 2?
-
-    // holy f this might be working
-    const getFirstIdBefore = await this.findAll({
+    const firstLogBefore = await this.prisma.prime1Log.findMany({
+      orderBy: {
+        entry: 'asc',
+      },
+      cursor: {
+        id: firstLog.id,
+      },
       take: -1,
       skip: 1,
-      cursor: {
-        id: firstIdx,
-      },
     });
+    console.log('firstLogBeforeSelection', firstLogBefore);
 
-    const getFirstIdAfter = await this.findAll({
+    const firstLogAfter = await this.prisma.prime1Log.findMany({
+      orderBy: {
+        entry: 'asc',
+      },
+      cursor: {
+        id: lastLog.id,
+      },
       take: 1,
       skip: 1,
-      cursor: {
-        id: lastIdx,
-      },
     });
 
-    // now theoretically first ID should be the idBefore
-    // now run a query on the table where it's more limited
-    // and see if this works
-    console.log('getFirstIdBeforeSelection', getFirstIdBefore);
-    console.log('getFirstIdAfterSelection', getFirstIdAfter);
-
     const meta = {
-      idBefore: getFirstIdBefore[0].id,
-      idAfter: getFirstIdAfter[0].id,
+      idBefore: firstLogBefore[0]?.id ?? firstIdx,
+      idAfter: firstLogAfter[0]?.id ?? lastIdx,
       total,
       firstIdx,
       lastIdx,
       filterParams: params,
+      filterParamsHash: hash(JSON.stringify(params)),
     };
     return {
       logs,

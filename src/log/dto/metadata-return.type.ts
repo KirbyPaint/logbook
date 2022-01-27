@@ -7,6 +7,7 @@ type Metadata = {
   firstIdx: string; // the index of the first result
   lastIdx: string; // the index of the last result
   filterParams: {}; // the filter parameters used to find the results
+  filterParamsHash: string; // the hash of the filter parameters used to find the results
   [key: string]: any;
 };
 
