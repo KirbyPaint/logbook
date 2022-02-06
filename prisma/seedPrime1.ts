@@ -1,10 +1,11 @@
 import { PrimeLogDataCategory, PrismaClient } from '@prisma/client';
-import * as path from 'path';
-import * as fs from 'fs';
-import * as readline from 'readline';
-import * as parse from 'csv-parse/lib/sync';
+import { stream } from './seed';
 
 const prisma = new PrismaClient();
+
+export async function seedPrime1() {
+  await main();
+}
 
 async function main() {
   await prisma.$connect();
@@ -28,30 +29,6 @@ async function main() {
     'Prime1_ResearchData.csv',
     PrimeLogDataCategory.RESEARCH,
   );
-}
-
-async function stream(filename: string): Promise<string[][]> {
-  const filePath = path.join(__dirname, 'seedData', filename);
-  let result: string[][] = [];
-  const input = fs.createReadStream(filePath);
-  try {
-    const rl = readline.createInterface({
-      input,
-      crlfDelay: Infinity,
-    });
-    let sawHeaders = false;
-    for await (const line of rl) {
-      if (!sawHeaders) {
-        sawHeaders = true;
-        continue;
-      }
-      const row = (parse(line) as unknown as string[][])[0];
-      result.push(row);
-    }
-  } finally {
-    input.close();
-  }
-  return result;
 }
 
 async function prime1ArtifactData(

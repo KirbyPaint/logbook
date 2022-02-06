@@ -60,6 +60,7 @@ model Prime3Log {
   limitedScan   Boolean?
   notes         String?
   image         String?
+  majorCategory String?
   User          User[]               @relation(fields: [userId], references: [id])
   userId        String?
 }
