@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import * as chalk from 'chalk';
-import { LogService } from '../log/log.service';
+import { Prime1LogService } from '../prime1-log/prime1-log.service';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService, private logService: LogService) {}
+  constructor(
+    private prisma: PrismaService,
+    private prime1LogService: Prime1LogService,
+  ) {}
 
   async create(data: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({
@@ -73,27 +76,6 @@ export class UserService {
       },
       data: params,
     });
-    return updatedUser;
-  }
-
-  async addLogToUser(userId: string, logId: string) {
-    await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-    await this.logService.findOne(logId);
-
-    // Now need to create the relation between the user and the log
-    const updatedUser = await this.prisma.user.update({
-      where: { id: userId },
-      data: {
-        Prime1Log: { connect: { id: logId } },
-      },
-    });
-
-    await this.logService.update(logId, {
-      User: updatedUser,
-    });
-
     return updatedUser;
   }
 

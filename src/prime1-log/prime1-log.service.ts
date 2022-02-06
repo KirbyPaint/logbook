@@ -1,26 +1,56 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePrime1LogDto } from './dto/create-prime1-log.dto';
-import { UpdatePrime1LogDto } from './dto/update-prime1-log.dto';
+import { Prime1Log, Prisma } from '@prisma/client';
+import { PrismaService } from '../prisma.service';
+import * as chalk from 'chalk';
 
 @Injectable()
 export class Prime1LogService {
-  create(createPrime1LogDto: CreatePrime1LogDto) {
-    return 'This action adds a new prime1Log';
+  constructor(private prisma: PrismaService) {}
+
+  async findAll(params: Prisma.Prime1LogFindManyArgs): Promise<Prime1Log[]> {
+    if (params) {
+      const { skip, take, cursor, where, orderBy } = params;
+      return await this.prisma.prime1Log.findMany({
+        skip,
+        take,
+        cursor,
+        where,
+        orderBy: orderBy ?? {
+          entry: 'asc',
+        },
+        include: {
+          User: true,
+        },
+      });
+    } else {
+      return await this.prisma.prime1Log.findMany({
+        include: {
+          User: true,
+        },
+        orderBy: {
+          entry: 'asc',
+        },
+      });
+    }
   }
 
-  findAll() {
-    return `This action returns all prime1Log`;
+  async findOne(id: string): Promise<Prime1Log | null> {
+    try {
+      return await this.prisma.prime1Log.findUnique({
+        where: { id },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} prime1Log`;
+  async findScanned(): Promise<Prime1Log[]> {
+    return this.prisma
+      .$queryRaw`SELECT * FROM "Prime1Log" WHERE "userId" IS NOT NULL`;
   }
 
-  update(id: number, updatePrime1LogDto: UpdatePrime1LogDto) {
-    return `This action updates a #${id} prime1Log`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} prime1Log`;
+  async superDelete() {
+    console.log(`お前はもう`, chalk.red`死んでいる`);
+    return this.prisma.$queryRaw`DELETE FROM "Prime1Log" WHERE 1=1`;
   }
 }
