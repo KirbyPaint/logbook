@@ -29,7 +29,7 @@ model Prime1Log {
   limitedScan   Boolean?
   notes         String?
   image         String?
-  User          User[]               @relation(fields: [userId], references: [id])
+  User          User[]               @relation(references: [id])
   userId        String?
 }
 
@@ -46,7 +46,7 @@ model Prime2Log {
   majorCategory String?
   minorCategory String?
   subCategory   String?
-  User          User[]               @relation(fields: [userId], references: [id])
+  User          User[]               @relation(references: [id])
   userId        String?
 }
 
@@ -61,7 +61,7 @@ model Prime3Log {
   notes         String?
   image         String?
   majorCategory String?
-  User          User[]               @relation(fields: [userId], references: [id])
+  User          User[]               @relation(references: [id])
   userId        String?
 }
 
@@ -71,11 +71,11 @@ model User {
   name         String?
   username     String      @unique
   password     String
-  Prime1Log    Prime1Log[] @relation(fields: [Prime1LogIds], references: [id])
+  Prime1Log    Prime1Log[] @relation(references: [id])
   Prime1LogIds String?
-  Prime2Log    Prime2Log[] @relation(fields: [Prime2LogIds], references: [id])
+  Prime2Log    Prime2Log[] @relation(references: [id])
   Prime2LogIds String?
-  Prime3Log    Prime3Log[] @relation(fields: [Prime3LogIds], references: [id])
+  Prime3Log    Prime3Log[] @relation(references: [id])
   Prime3LogIds String?
 }
 
