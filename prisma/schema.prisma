@@ -79,6 +79,14 @@ model User {
   Prime3LogIds String?
 }
 
+model TestCsv {
+  field1 String
+  field2 String
+  field3 String
+
+  @@id([field1, field2])
+}
+
 // model LogsOnUsers {
 //   id          String   @id @default(uuid())
 //   userId      String   @unique

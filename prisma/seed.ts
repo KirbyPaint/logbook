@@ -10,12 +10,41 @@ import { seedPrime3 } from './seedPrime3';
 
 const prisma = new PrismaClient();
 
+const postgres = require('postgres');
+
+const options = {};
+const sql = postgres(
+  'postgresql://kirbypaint:randompassword@localhost:5432/primelogs?schema=public',
+); // will default to the same as psql
+
+async function postgresPls() {
+  var absolutePath = path.resolve(path.join('prisma', 'testCopy.csv'));
+  const result = await sql`
+    COPY "TestCsv" FROM ${sql(absolutePath)} DELIMITER ',' CSV STDIN;
+  `;
+  sql.end({ timeout: null });
+  return result;
+}
+
 async function main() {
   await prisma.$connect();
-  await seedPrime1();
-  await seedPrime2();
-  await seedPrime3();
-  await seedDefaultUsers();
+  const result = await postgresPls();
+  console.log('result', result);
+  // await seedTest();
+  // await seedPrime1();
+  // await seedPrime2();
+  // await seedPrime3();
+  // await seedDefaultUsers();
+}
+
+// for copying
+// await prisma.$executeRaw`;`;
+async function seedTest() {
+  // can the program open its own terminal to connect with
+  await prisma.$executeRaw`psql -U postgres`;
+  const result =
+    await prisma.$executeRaw`copy "TestCsv" FROM 'testCopy.csv' DELIMITER ',';`;
+  console.log('result', result);
 }
 
 export async function stream(filename: string): Promise<string[][]> {
