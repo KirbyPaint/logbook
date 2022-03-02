@@ -10,26 +10,63 @@ import { seedPrime3 } from './seedPrime3';
 
 const prisma = new PrismaClient();
 
-const postgres = require('postgres');
+// const postgres = require('postgres');
 
-const options = {};
-const sql = postgres(
-  'postgresql://kirbypaint:randompassword@localhost:5432/primelogs?schema=public',
-); // will default to the same as psql
+// const options = {};
+// const sql = postgres(
+//   'postgresql://kirbypaint:randompassword@localhost:5432/primelogs?schema=public',
+// ); // will default to the same as psql
 
-async function postgresPls() {
-  var absolutePath = path.resolve(path.join('prisma', 'testCopy.csv'));
-  const result = await sql`
-    COPY "TestCsv" FROM ${sql(absolutePath)} DELIMITER ',' CSV STDIN;
-  `;
-  sql.end({ timeout: null });
-  return result;
-}
+// async function postgresPls() {
+//   var absolutePath = path.resolve(path.join('prisma', 'testCopy.csv'));
+//   const result = await sql`
+//     COPY "TestCsv" FROM ${sql(absolutePath)} DELIMITER ',' CSV STDIN;
+//   `;
+//   sql.end({ timeout: null });
+//   return result;
+// }
+
+var { Pool, Client } = require('pg');
+var copyFrom = require('pg-copy-streams').from;
 
 async function main() {
   await prisma.$connect();
-  const result = await postgresPls();
-  console.log('result', result);
+
+  const query = `COPY "TestCsv" FROM $1 DELIMITER ',' CSV STDIN;`;
+  const absolutePath = [path.resolve(path.join('prisma', 'testCopy.csv'))];
+
+  var pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+  pool.connect(function (err, client, done) {
+    var stream = client.query(copyFrom('COPY "TestCsv" FROM STDIN'));
+    var fileStream = fs.createReadStream('/prisma/testCopy.csv');
+    fileStream.on('error', done);
+    // stream.on('error', done);
+    // stream.on('finish', done);
+    fileStream.pipe(stream);
+  });
+  // pool.query('SELECT NOW()', (err, res) => {
+  //   console.log(err, res);
+  //   pool.end();
+  // });
+  // const client = new Client({
+  //   connectionString: process.env.DATABASE_URL,
+  // });
+  // client.connect();
+  // // const text = 'INSERT INTO users(name, email) VALUES($1, $2) RETURNING *';
+  // // const values = ['brianc', 'brian.m.carlson@gmail.com'];
+  // // callback
+  // client.query(query, absolutePath, (err, res) => {
+  //   if (err) {
+  //     console.log(err.stack);
+  //   } else {
+  //     console.log(res.rows[0]);
+  //     // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
+  //   }
+  // });
+  // const result = await postgresPls();
+  // console.log('result', result);
   // await seedTest();
   // await seedPrime1();
   // await seedPrime2();
